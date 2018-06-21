@@ -1,40 +1,30 @@
-;
-(function () {
-  'use strict'
-
-  if (window.logRerport) {
-    return window.logRerport
-  };
-
-  /*
-   *  默认上报的错误信息
-   */
-  var defaults = {
-    msg: '', // 错误的具体信息
-    url: '', // 错误所在的url
-    line: '', // 错误所在的行
-    col: '', // 错误所在的列
-    error: '' // 具体的error对象
+/*
+* @Author: ecitlm
+* @Date:   2018-06-21 09:39:59
+* @Last Modified by:   ecitlm
+* @Last Modified time: 2018-06-21 13:36:53
+*/
+;(function () {
+  if (window.errLogReport) {
+    return window.errLogReport
   }
-
   /*
-   *ajax封装
-   */
-  function ajax(options) {
+    *ajax封装
+    */
+  function ajax (options) {
     options = options || {}
     options.type = (options.type || 'GET').toUpperCase()
     options.dataType = options.dataType || 'json'
     var params = formatParams(options.data)
-    var xhr
 
     if (window.XMLHttpRequest) {
-      xhr = new XMLHttpRequest()
+      var xhr = new XMLHttpRequest()
     } else {
-      xhr = new ActiveXObject('Microsoft.XMLHTTP')
+      var xhr = new ActiveXObject('Microsoft.XMLHTTP')
     }
 
     xhr.onreadystatechange = function () {
-      if (xhr.readyState === 4) {
+      if (xhr.readyState == 4) {
         var status = xhr.status
         if (status >= 200 && status < 300) {
           options.success && options.success(xhr.responseText, xhr.responseXML)
@@ -44,10 +34,10 @@
       }
     }
 
-    if (options.type === 'GET') {
+    if (options.type == 'GET') {
       xhr.open('GET', options.url + '?' + params, true)
       xhr.send(null)
-    } else if (options.type === 'POST') {
+    } else if (options.type == 'POST') {
       xhr.open('POST', options.url, true)
       // 设置表单提交时的内容类型
       xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
@@ -56,9 +46,9 @@
   }
 
   /*
-   *格式化参数
-   */
-  function formatParams(data) {
+    *格式化参数
+    */
+  function formatParams (data) {
     var arr = []
     for (var name in data) {
       arr.push(encodeURIComponent(name) + '=' + encodeURIComponent(data[name]))
@@ -68,23 +58,19 @@
   }
 
   /*
-   * 合并对象，将配置的参数也一并上报
-   */
-  function cloneObj(oldObj) { // 复制对象方法
+    * 合并对象，将配置的参数也一并上报
+    */
+  function cloneObj (oldObj) { // 复制对象方法
     if (typeof (oldObj) !== 'object') return oldObj
     if (oldObj == null) return oldObj
     var newObj = new Object()
-    for (var prop in oldObj) {
-      newObj[prop] = oldObj[prop]
-    }
+    for (var prop in oldObj) { newObj[prop] = oldObj[prop] }
     return newObj
   };
 
-  function extendObj() { // 扩展对象
+  function extendObj () { // 扩展对象
     var args = arguments
-    if (args.length < 2) {
-      return
-    }
+    if (args.length < 2) { return }
     var temp = cloneObj(args[0]) // 调用复制对象方法
     for (var n = 1, len = args.length; n < len; n++) {
       for (var index in args[n]) {
@@ -94,13 +80,83 @@
     return temp
   }
 
+  function getSystemVersion () {
+    var ua = window.navigator.userAgent
+    if (ua.indexOf('CPU iPhone OS ') >= 0) {
+      return ua.substring(ua.indexOf('CPU iPhone OS ') + 14, ua.indexOf(' like Mac OS X'))
+    } else if (ua.indexOf('Android ') >= 0) {
+      return ua.substr(ua.indexOf('Android ') + 8, 3)
+    } else {
+      return 'other'
+    }
+  }
+
+  /**
+   获取浏览器类型
+  */
+  function getBrowser () {
+    var userAgent = navigator.userAgent // 取得浏览器的userAgent字符串
+    var isOpera = userAgent.indexOf('Opera') > -1
+    if (isOpera) {
+      return 'Opera'
+    }; // 判断是否Opera浏览器
+    if (userAgent.indexOf('Firefox') > -1) {
+      return 'FF'
+    } // 判断是否Firefox浏览器
+    if (userAgent.indexOf('Chrome') > -1) {
+      return 'Chrome'
+    }
+    if (userAgent.indexOf('Safari') > -1) {
+      return 'Safari'
+    } // 判断是否Safari浏览器
+    if (userAgent.indexOf('compatible') > -1 && userAgent.indexOf('MSIE') > -1 && !isOpera) {
+      return 'IE'
+    }; // 判断是否IE浏览器
+  }
+
+  /**
+   获取设备是安卓、IOS  还是PC端
+  */
+  function getDevices () {
+    var u = navigator.userAgent, app = navigator.appVersion
+    if (/AppleWebKit.*Mobile/i.test(navigator.userAgent) || (/MIDP|SymbianOS|NOKIA|SAMSUNG|LG|NEC|TCL|Alcatel|BIRD|DBTEL|Dopod|PHILIPS|HAIER|LENOVO|MOT-|Nokia|SonyEricsson|SIE-|Amoi|ZTE/.test(navigator.userAgent))) {
+      if (window.location.href.indexOf('?mobile') < 0) {
+        try {
+          if (/iPhone|mac|iPod|iPad/i.test(navigator.userAgent)) {
+            return 'iPhone'
+          } else {
+            return 'Android'
+          }
+        } catch (e) {}
+      }
+    } else if (u.indexOf('iPad') > -1) {
+      return 'iPhone'
+    } else {
+      return 'Android'
+    }
+  }
+
+  /*
+    *  默认上报的错误信息
+    */
+  var defaults = {
+    ua: window.navigator.userAgent,
+    browser: getBrowser(),
+    os: getDevices(),
+    osVersion: getSystemVersion(),
+    errUrl: window.location.href,
+    msg: '', // 错误的具体信息
+    url: '', // 错误所在的url
+    line: '', // 错误所在的行
+    col: '', // 错误所在的列
+    error: '' // 具体的error对象
+  }
+
   /**
    * 核心代码区
    **/
-  var logRerport = function (params) {
-    if (!params.url) {
-      return
-    }
+  var errLogReport = function (params) {
+    if (!params.url) { return }
     window.onerror = function (msg, url, line, col, error) {
       // 采用异步的方式,避免阻塞
       setTimeout(function () {
@@ -122,7 +178,7 @@
           while (fn && (--floor > 0)) {
             ext.push(fn.toString())
             if (fn === fn.caller) {
-              break // 如果有环
+              break// 如果有环
             }
             fn = fn.caller
           }
@@ -153,62 +209,5 @@
     }
   }
 
-  window.logRerport = logRerport
+  window.errLogReport = errLogReport
 })()
-
-function getSystemVersion() {
-  var ua = window.navigator.userAgent
-  if (ua.indexOf('CPU iPhone OS ') >= 0) {
-    return ua.substring(ua.indexOf('CPU iPhone OS ') + 14, ua.indexOf(' like Mac OS X'))
-  } else if (ua.indexOf('Android ') >= 0) {
-    return ua.substr(ua.indexOf('Android ') + 8, 3)
-  } else {
-    return 'other'
-  }
-}
-
-function getOs () {
-  var ua = window.navigator.userAgent
-  if (/iPhone|mac|iPod|iPad/i.test(ua)) {
-    return 'iPhone'
-  } else if (/Windows|Win64|windows|win/i.test(ua)) {
-    return 'windows'
-  } else if (/Android|android/i.test(ua)) {
-    return 'Android'
-  } else {
-    return 'others'
-  }
-}
-
-function getBrowser () {
-  var userAgent = navigator.userAgent // 取得浏览器的userAgent字符串
-  var isOpera = userAgent.indexOf('Opera') > -1
-  if (isOpera) {
-    return 'Opera'
-  }; // 判断是否Opera浏览器
-  if (userAgent.indexOf('Firefox') > -1) {
-    return 'FF'
-  } // 判断是否Firefox浏览器
-  if (userAgent.indexOf('Chrome') > -1) {
-    return 'Chrome'
-  }
-  if (userAgent.indexOf('Safari') > -1) {
-    return 'Safari'
-  } // 判断是否Safari浏览器
-  if (userAgent.indexOf('compatible') > -1 && userAgent.indexOf('MSIE') > -1 && !isOpera) {
-    return 'IE'
-  }; // 判断是否IE浏览器
-}
-
-var data = {
-  ua: window.navigator.userAgent,
-  osVersion: getSystemVersion(),
-  os: getOs(),
-  productname: 'test',
-  browser: getBrowser(),
-  errUrl: window.location.href
-}
-window.logRerport({
-  data: data,
-  url: '//www.it919.cn'
-})
