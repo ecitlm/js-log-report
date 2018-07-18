@@ -2,6 +2,11 @@
 前端错误日志采集上报、上报给后端分析错误日、主要用于移动端各手机类型错误日志的收集分析
 
 
+
+### 安装 Installation
+```
+npm install js-log-report 
+```
 ### 业务背景
 > 主要用于移动端各手机类型错误日志的收集分析
 
@@ -105,4 +110,7 @@ CREATE TABLE `j_log` (
 ### 缺点
 对于压缩的代码，报错信息没法定位到具体是什么地方报错了，这里没有去详细研究，阮一峰老师有篇相关文章 
 [JavaScript Source Map 详解](http://www.ruanyifeng.com/blog/2013/01/javascript_source_map.html)，有时间再去研究一下
+
+#### License
+MIT licensed.
 
