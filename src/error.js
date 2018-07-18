@@ -211,3 +211,13 @@
 
   window.errLogReport = errLogReport
 })()
+
+if (typeof(module) !== 'undefined'){
+    module.exports = window.errLogReport
+}
+else if (typeof define === 'function' && define.amd) {
+    define([], function () {
+        'use strict'
+        return window.errLogReport
+    })
+}

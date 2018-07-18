@@ -1,0 +1,22 @@
+{
+  "name": "js-log-report",
+  "version": "1.0.0",
+  "description": "js-report",
+  "main": "src/error.min.js",
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ecitlm/js-log-report.git"
+  },
+  "author": "ecitlm",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ecitlm/js-log-report/issues"
+  },
+  "homepage": "https://github.com/ecitlm/js-log-report#readme"
+}
