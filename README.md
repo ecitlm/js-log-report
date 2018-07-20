@@ -7,6 +7,10 @@
 ```
 npm install js-log-report 
 ```
+#### 浏览器页面引入
+```html
+<script type="text/javascript" src="https://unpkg.com/js-log-report@1.0.0/src/error.min.js"></script>
+```
 ### 业务背景
 > 主要用于移动端各手机类型错误日志的收集分析
 
@@ -68,7 +72,7 @@ window.onerror = function (msg, url, line, col, error) {
 > 使用如`index.html`所示,导入以下代码在页面head中，并且优先于其他JS文件加载
 
 ```html
-<script type="text/javascript" src="./error.js"></script>
+<script type="text/javascript" src="https://unpkg.com/js-log-report@1.0.0/src/error.min.js"></script>
     <script type="text/javascript">
       var data = {
       productname: 'test' //产品名称
