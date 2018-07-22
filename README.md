@@ -72,17 +72,17 @@ window.onerror = function (msg, url, line, col, error) {
 > 使用如`index.html`所示,导入以下代码在页面head中，并且优先于其他JS文件加载
 
 ```html
-<script type="text/javascript" src="https://unpkg.com/js-log-report@1.0.0/src/error.min.js"></script>
-    <script type="text/javascript">
-      var data = {
-      productname: 'test' //产品名称
-      extend:'' //扩展字段,允许是JSON 字符串的形式保存
-      }
-      errLogReport({
-      data: data,
-      url: 'http://localhost:8080/api/sendError'
+<script type="text/javascript" src="https://unpkg.com/js-log-report"></script>
+<script>
+    errLogReport({
+        data: {
+    	productname: 'test' //产品名称
+	},
+    	url: 'http://test.com/api/sendError' //上报地址
       })
-    </script>
+      var a=1
+      b=c
+</script>
 ```
 
 ### 数据上报表结构

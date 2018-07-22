@@ -1,7 +1,7 @@
 {
   "name": "js-log-report",
-  "version": "1.0.0",
-  "description": "js-report",
+  "version": "1.0.2",
+  "description": "js-log-report",
   "main": "src/error.min.js",
   "directories": {
     "example": "example"
@@ -14,6 +14,12 @@
     "url": "git+https://github.com/ecitlm/js-log-report.git"
   },
   "author": "ecitlm",
+  "keywords": [
+    "jslog",
+    "badjs",
+    "js-log-report",
+    "errorlog"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/ecitlm/js-log-report/issues"

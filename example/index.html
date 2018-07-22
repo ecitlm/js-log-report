@@ -11,20 +11,18 @@
 <body>
     <script type="text/javascript" src="../src/error.min.js"></script>
     <script type="text/javascript">
-      var data = {
-    	productname: 'test',//产品名称
-    	extend:'' //扩展字段,允许是JSON 字符串的形式保存
-      }
       errLogReport({
-    	data: data,
-    	url: 'http://localhost:8080/api/sendError'
+    	data: {
+    	productname: 'test' //产品名称
+		},
+    	url: 'http://test.com/api/sendError'
       })
+
+	  // 第一一段错误的JS代码
 
       var a=1;
       b=c
     </script>
-
-
-	<h4>查看控制台</h4>
+	<h4>请查看控制台可看到上报数据</h4>
 </body>
 </html>
