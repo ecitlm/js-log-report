@@ -1,21 +1,31 @@
 # js-log-report
-前端错误日志采集上报、上报给后端分析错误日、主要用于移动端各手机类型错误日志的收集分析
+>前端错误日志采集上报、上报给后端分析错误日、主要用于移动端各手机类型错误日志的收集分析
 
 
+### 为何要做错误日志追踪上报 (业务背景)
+> 前端JS代码错误，浏览器都都会在控制台输出错误信息，以及出错的文件，行号，堆栈信息，这些错误很容易导致页面代码不执行，并且考虑到手机类型五花八门，浏览器内核以及版本的差异性，前端代码机型兼容性问题，并不能将所有的手机都拿来适配，前端错误日志上报是一个较好的解决方案
 
 ### 安装 Installation
+
+__直接下载__
+点击下载 [error.js](https://github.com/ecitlm/js-log-report/blob/master/src/error.min.js)直接在你的页面中引用
+```
+<script src="/path/to/error.min.js"></script>
+```
+或者引用 `jsDelivr CDN:`
+```
+<script type="text/javascript" src="https://unpkg.com/js-log-report/src/error.min.js"></script>
+```
+__npm模块安装__
 ```
 npm install js-log-report 
 ```
-#### 浏览器页面引入
-```html
-<script type="text/javascript" src="https://unpkg.com/js-log-report@1.0.0/src/error.min.js"></script>
-```
-### 业务背景
-> 主要用于移动端各手机类型错误日志的收集分析
 
-### 为何要做错误日志追踪上报
-前端JS代码错误，浏览器都都会在控制台输出错误信息，以及出错的文件，行号，堆栈信息，这些错误很容易导致页面代码不执行，并且考虑到手机类型五花八门，浏览器内核以及版本的差异性，前端代码机型兼容性问题，并不能将所有的手机都拿来适配，前端错误日志上报是一个较好的解决方案
+```
+import errLogReport from 'js-log-report'
+// 方法调用查看 如何使用
+
+```
 
 
 ### 日志上报哪些数据
@@ -85,6 +95,9 @@ window.onerror = function (msg, url, line, col, error) {
 </script>
 ```
 
+![上报数据样式](http://wx4.sinaimg.cn/mw690/0060lm7Tly1ftn2k22h1cj30ko062dg8.jpg
+)
+
 ### 数据上报表结构
 ```mysql
 DROP TABLE IF EXISTS `j_log`;
@@ -113,7 +126,7 @@ CREATE TABLE `j_log` (
 
 ### 缺点
 对于压缩的代码，报错信息没法定位到具体是什么地方报错了，这里没有去详细研究，阮一峰老师有篇相关文章 
-[JavaScript Source Map 详解](http://www.ruanyifeng.com/blog/2013/01/javascript_source_map.html)，有时间再去研究一下
+[JavaScript Source Map 详解](http://www.ruanyifeng.com/blog/2013/01/javascript_source_map.html)
 
 #### License
 MIT licensed.
