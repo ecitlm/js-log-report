@@ -1,24 +1,30 @@
 # js-log-report
->前端错误日志采集上报、上报给后端分析错误日、主要用于移动端各手机类型错误日志的收集分析
 
+> 前端错误日志采集上报、上报给后端分析错误日、主要用于移动端各手机类型错误日志的收集分析
 
 ### 为何要做错误日志追踪上报 (业务背景)
-> 前端JS代码错误，浏览器都都会在控制台输出错误信息，以及出错的文件，行号，堆栈信息，这些错误很容易导致页面代码不执行，并且考虑到手机类型五花八门，浏览器内核以及版本的差异性，前端代码机型兼容性问题，并不能将所有的手机都拿来适配，前端错误日志上报是一个较好的解决方案
+
+> 前端 JS 代码错误，浏览器都都会在控制台输出错误信息，以及出错的文件，行号，堆栈信息，这些错误很容易导致页面代码不执行，并且考虑到手机类型五花八门，浏览器内核以及版本的差异性，前端代码机型兼容性问题，并不能将所有的手机都拿来适配，前端错误日志上报是一个较好的解决方案
 
 ### 安装 Installation
 
-__直接下载__
+**直接下载**
 点击下载 [error.js](https://github.com/ecitlm/js-log-report/blob/master/src/error.min.js)直接在你的页面中引用
+
 ```
 <script src="/path/to/error.min.js"></script>
 ```
+
 或者引用 `jsDelivr CDN:`
+
 ```
 <script type="text/javascript" src="https://unpkg.com/js-log-report/src/error.min.js"></script>
 ```
-__npm模块安装__
+
+**npm 模块安装**
+
 ```
-npm install js-log-report 
+npm install js-log-report
 ```
 
 ```
@@ -27,78 +33,79 @@ import errLogReport from 'js-log-report'
 
 ```
 
-
 ### 日志上报哪些数据
-1.通过 `wiindow.onerror` 可以获取 `msg, url, line, col, error`等错误信息,JS 的错误行号、url错误地址，
-2.通过 `window.navigator.userAgent` 获取 设备浏览器的信息集合
+
+1.通过 `window.onerror` 可以获取 `msg, url, line, col, error`等错误信息,JS 的错误行号、url 错误地址， 2.通过 `window.navigator.userAgent` 获取 设备浏览器的信息集合
 如：
+
 ```
 User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1
 ```
+
 3. `os_version` 系统版本号
 4. `browser` 浏览器类型 `Opera` `FF` `Chrome` `Safari` `IE`
+
 ```javascript
- var defaults = {
-    ua: window.navigator.userAgent,
-    browser: '',
-    os: '',
-    osVersion: '',
-    errUrl: window.location.href,
-    msg: '', // 错误的具体信息
-    url: '', // 错误所在的url
-    line: '', // 错误所在的行
-    col: '', // 错误所在的列
-    error: '' // 具体的error对象
-  }
+var defaults = {
+  ua: window.navigator.userAgent,
+  browser: '',
+  os: '',
+  osVersion: '',
+  errUrl: window.location.href,
+  msg: '', // 错误的具体信息
+  url: '', // 错误所在的url
+  line: '', // 错误所在的行
+  col: '', // 错误所在的列
+  error: '' // 具体的error对象
+}
 ```
+
 具体上报字段可查看表结构
 
-
-
 ### 如何实现错误上报
-1.实现错误日志收集 收集onerror 错误参数，以及自定义的参数
-2.核心`window.onerror`，重写该方法、在此中捕获异常错误信息、并且将错误信息发送至服务器接口
+
+1.实现错误日志收集 收集 onerror 错误参数，以及自定义的参数 2.核心`window.onerror`，重写该方法、在此中捕获异常错误信息、并且将错误信息发送至服务器接口
 大致代码如下
+
 ```javascript
-window.onerror = function (msg, url, line, col, error) {
+window.onerror = function(msg, url, line, col, error) {
   ajax({
     url: 'xxx/api/sendError', // 请求地址
     type: 'POST', // 请求方式
     data: data, // 请求参数
     dataType: 'json',
-    success: function (response, xml) {
+    success: function(response, xml) {
       // success
     },
-    fail: function (status) {
+    fail: function(status) {
       // error
     }
   })
 }
 ```
 
-
-
 ### 如何使用
-> 使用如`index.html`所示,导入以下代码在页面head中，并且优先于其他JS文件加载
+
+> 使用如`index.html`所示,导入以下代码在页面 head 中，并且优先于其他 JS 文件加载
 
 ```html
 <script type="text/javascript" src="https://unpkg.com/js-log-report"></script>
 <script>
-    errLogReport({
-        data: {
-    	productname: 'test' //产品名称
-	},
-    	url: 'http://test.com/api/sendError' //上报地址
-      })
-      var a=1
-      b=c
+  errLogReport({
+    data: {
+      productname: 'test' //产品名称
+    },
+    url: 'http://test.com/api/sendError' //上报地址
+  })
+  var a = 1
+  b = c
 </script>
 ```
 
-![上报数据样式](http://wx4.sinaimg.cn/mw690/0060lm7Tly1ftn2k22h1cj30ko062dg8.jpg
-)
+![上报数据样式](http://wx4.sinaimg.cn/mw690/0060lm7Tly1ftn2k22h1cj30ko062dg8.jpg)
 
 ### 数据上报表结构
+
 ```mysql
 DROP TABLE IF EXISTS `j_log`;
 CREATE TABLE `j_log` (
@@ -122,12 +129,14 @@ CREATE TABLE `j_log` (
 ```
 
 ### 源代码
+
 [GitHub](https://github.com/ecitlm/js-log-report)
 
 ### 缺点
-对于压缩的代码，报错信息没法定位到具体是什么地方报错了，这里没有去详细研究，阮一峰老师有篇相关文章 
+
+对于压缩的代码，报错信息没法定位到具体是什么地方报错了，这里没有去详细研究，阮一峰老师有篇相关文章
 [JavaScript Source Map 详解](http://www.ruanyifeng.com/blog/2013/01/javascript_source_map.html)
 
 #### License
-MIT licensed.
 
+MIT licensed.
